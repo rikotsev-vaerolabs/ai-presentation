@@ -1,0 +1,1277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modern AI Knowledge</title>
+  <style>
+    :root {
+      --ink: #17201b;
+      --muted: #5d6a60;
+      --paper: #f5f0e7;
+      --paper-2: #fffaf0;
+      --green: #214f3a;
+      --green-2: #386f55;
+      --lime: #c7d66d;
+      --clay: #b96d48;
+      --rust: #803e2f;
+      --blue: #285b73;
+      --line: rgba(23, 32, 27, 0.18);
+      --shadow: 0 24px 70px rgba(23, 32, 27, 0.16);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 10%, rgba(199, 214, 109, 0.55), transparent 26%),
+        radial-gradient(circle at 88% 18%, rgba(185, 109, 72, 0.28), transparent 24%),
+        linear-gradient(135deg, #efe4d1 0%, #f8f3e8 48%, #e7ebdc 100%);
+      font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image:
+        linear-gradient(rgba(23, 32, 27, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 32, 27, 0.08) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: radial-gradient(circle at center, black, transparent 78%);
+    }
+
+    .deck {
+      min-height: 100vh;
+      width: 100%;
+      position: relative;
+    }
+
+    .slide {
+      position: relative;
+      padding: clamp(22px, 3.6vw, 58px);
+      display: none;
+      grid-template-rows: auto minmax(0, 1fr) auto;
+      gap: 22px;
+      background:
+        linear-gradient(155deg, rgba(255, 250, 240, 0.92), rgba(245, 240, 231, 0.84)),
+        radial-gradient(circle at 80% 100%, rgba(33, 79, 58, 0.12), transparent 36%);
+      border: 1px solid rgba(23, 32, 27, 0.18);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin: 22px;
+      min-height: calc(100vh - 44px);
+      overflow: visible;
+    }
+
+    .slide.active {
+      display: grid;
+      animation: lift 520ms ease both;
+    }
+
+    @keyframes lift {
+      from { opacity: 0; transform: translateY(18px) scale(0.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      gap: 24px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1, h2 {
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      text-transform: uppercase;
+    }
+
+    h1 { font-size: clamp(46px, 8vw, 114px); max-width: 980px; }
+    h2 { font-size: clamp(34px, 5.4vw, 76px); }
+
+    h3 {
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-size: clamp(19px, 2vw, 30px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 7px 12px;
+      border: 1px solid rgba(23, 32, 27, 0.24);
+      border-radius: 999px;
+      color: var(--green);
+      background: rgba(255, 250, 240, 0.62);
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .content {
+      min-height: 0;
+      display: grid;
+      align-items: stretch;
+      gap: 18px;
+      overflow: visible;
+    }
+
+    .two-col {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .two-col.wide-left {
+      grid-template-columns: 1.25fr 0.75fr;
+    }
+
+    .three-col {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .slide-2-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .slide-3-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dataset-split {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      padding: 15px;
+      border-radius: 18px;
+      background: rgba(255, 250, 240, 0.66);
+      border: 1px solid rgba(23, 32, 27, 0.14);
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 6px;
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-size: clamp(18px, 1.5vw, 25px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 250, 240, 0.72);
+      padding: clamp(16px, 2vw, 26px);
+      box-shadow: 0 14px 40px rgba(23, 32, 27, 0.08);
+    }
+
+    .dark-card {
+      background: linear-gradient(145deg, var(--green), #10271d);
+      color: var(--paper-2);
+      border-color: rgba(255, 250, 240, 0.18);
+    }
+
+    .accent-card {
+      background: linear-gradient(145deg, rgba(199, 214, 109, 0.5), rgba(255, 250, 240, 0.74));
+    }
+
+    ul {
+      margin: 14px 0 0;
+      padding-left: 20px;
+      font-size: clamp(15px, 1.45vw, 22px);
+      line-height: 1.28;
+    }
+
+    li { margin: 8px 0; }
+
+    .small {
+      font-size: clamp(13px, 1.05vw, 17px);
+      line-height: 1.3;
+      color: var(--muted);
+    }
+
+    .lead {
+      font-size: clamp(20px, 2.3vw, 34px);
+      line-height: 1.14;
+      max-width: 980px;
+    }
+
+    .mono {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      letter-spacing: -0.02em;
+    }
+
+    .pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+
+    .pill {
+      padding: 8px 11px;
+      border-radius: 999px;
+      background: rgba(33, 79, 58, 0.1);
+      border: 1px solid rgba(33, 79, 58, 0.18);
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      font-size: clamp(13px, 1vw, 16px);
+      text-transform: uppercase;
+    }
+
+    .tree {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      height: 100%;
+    }
+
+    .tree-root {
+      justify-self: center;
+      padding: 16px 34px;
+      border-radius: 18px;
+      color: var(--paper-2);
+      background: var(--green);
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-size: clamp(24px, 2.5vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .tree-branches {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .tree-branches::before {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: 9%;
+      right: 9%;
+      border-top: 2px solid rgba(33, 79, 58, 0.32);
+    }
+
+    .branch {
+      position: relative;
+      padding: 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(33, 79, 58, 0.2);
+      background: rgba(255, 250, 240, 0.75);
+      min-height: 180px;
+    }
+
+    .branch::before {
+      content: "";
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      height: 15px;
+      border-left: 2px solid rgba(33, 79, 58, 0.32);
+    }
+
+    .branch.focus {
+      background: linear-gradient(160deg, rgba(33, 79, 58, 0.92), rgba(56, 111, 85, 0.86));
+      color: var(--paper-2);
+      transform: translateY(-8px);
+    }
+
+    .branch.focus .small { color: rgba(255, 250, 240, 0.76); }
+
+    .branch h3 { margin-bottom: 10px; }
+
+    .branch ul {
+      font-size: clamp(13px, 1vw, 16px);
+      line-height: 1.18;
+      margin-top: 8px;
+    }
+
+    .ml-subtree {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .node {
+      padding: 10px;
+      border-radius: 14px;
+      background: rgba(255, 250, 240, 0.14);
+      border: 1px solid rgba(255, 250, 240, 0.22);
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-weight: 700;
+      text-align: center;
+      font-size: clamp(12px, 0.9vw, 15px);
+      text-transform: uppercase;
+    }
+
+    .formula {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+      font-size: clamp(18px, 1.8vw, 28px);
+      line-height: 1.1;
+    }
+
+    .formula div {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(23, 32, 27, 0.14);
+      background: rgba(255, 250, 240, 0.62);
+    }
+
+    .flow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+
+    .flow-box {
+      padding: 13px 15px;
+      border-radius: 16px;
+      color: var(--paper-2);
+      background: var(--blue);
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-size: clamp(15px, 1.3vw, 20px);
+    }
+
+    .arrow {
+      font-family: Georgia, serif;
+      color: var(--rust);
+      font-size: 28px;
+      font-weight: 800;
+    }
+
+    .nn-graph {
+      margin-top: 14px;
+      width: 100%;
+      min-height: 168px;
+      border-radius: 18px;
+      border: 1px solid rgba(23, 32, 27, 0.14);
+      background:
+        radial-gradient(circle at 20% 25%, rgba(199, 214, 109, 0.25), transparent 24%),
+        rgba(255, 250, 240, 0.58);
+    }
+
+    .nn-graph text {
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      fill: var(--ink);
+    }
+
+    .nn-graph .sub {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: none;
+      fill: var(--muted);
+    }
+
+    .nn-graph .node-box {
+      fill: rgba(255, 250, 240, 0.86);
+      stroke: rgba(33, 79, 58, 0.32);
+      stroke-width: 1.4;
+    }
+
+    .nn-graph .hot {
+      fill: rgba(185, 109, 72, 0.22);
+      stroke: rgba(128, 62, 47, 0.55);
+    }
+
+    .nn-graph .prob {
+      fill: rgba(199, 214, 109, 0.36);
+      stroke: rgba(33, 79, 58, 0.5);
+    }
+
+    .nn-graph .edge {
+      stroke: rgba(128, 62, 47, 0.7);
+      stroke-width: 2.2;
+      fill: none;
+      marker-end: url(#arrowhead);
+    }
+
+    .nn-graph .back-edge {
+      stroke: rgba(33, 79, 58, 0.74);
+      stroke-width: 2.4;
+      fill: none;
+      marker-end: url(#arrowhead-back);
+    }
+
+    .nn-graph .grad {
+      fill: rgba(33, 79, 58, 0.14);
+      stroke: rgba(33, 79, 58, 0.46);
+    }
+
+    .nn-graph .param {
+      fill: rgba(40, 91, 115, 0.16);
+      stroke: rgba(40, 91, 115, 0.52);
+    }
+
+    .nn-graph .mlp-shell {
+      fill: rgba(199, 214, 109, 0.08);
+      stroke: rgba(33, 79, 58, 0.46);
+      stroke-width: 2;
+      stroke-dasharray: 8 7;
+    }
+
+    .backward-layout {
+      display: grid;
+      grid-template-columns: 0.72fr 1.28fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: clamp(13px, 1.05vw, 17px);
+      overflow: hidden;
+      border-radius: 14px;
+    }
+
+    th, td {
+      padding: 9px 11px;
+      border-bottom: 1px solid rgba(23, 32, 27, 0.13);
+      text-align: left;
+    }
+
+    th {
+      color: var(--paper-2);
+      background: var(--green);
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    td { background: rgba(255, 250, 240, 0.58); }
+
+    .tensor {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .tensor-step {
+      padding: 15px;
+      border-radius: 18px;
+      color: var(--paper-2);
+      background: linear-gradient(145deg, var(--clay), var(--rust));
+      min-height: 122px;
+    }
+
+    .tensor-step strong {
+      display: block;
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-size: clamp(18px, 1.4vw, 24px);
+      text-transform: uppercase;
+    }
+
+    .agent-grid {
+      display: grid;
+      grid-template-columns: 0.56fr 1.44fr;
+      gap: 18px;
+      align-items: center;
+      position: relative;
+    }
+
+    .agent-arrow-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+      overflow: visible;
+    }
+
+    .agent-arrow-layer path {
+      fill: none;
+      stroke: rgba(128, 62, 47, 0.78);
+      stroke-width: 2.6;
+      marker-end: url(#agent-arrowhead);
+    }
+
+    .agent-arrow-layer text {
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      fill: var(--rust);
+      paint-order: stroke;
+      stroke: rgba(255, 250, 240, 0.9);
+      stroke-width: 5px;
+      stroke-linejoin: round;
+    }
+
+    .user-box {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      min-height: 360px;
+      border-radius: 28px;
+      color: var(--paper-2);
+      background: linear-gradient(150deg, var(--blue), #15384a);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+      position: relative;
+      z-index: 2;
+    }
+
+    .harness {
+      position: relative;
+      border: 3px dashed rgba(33, 79, 58, 0.5);
+      border-radius: 30px;
+      padding: 38px 22px 22px;
+      background: rgba(255, 250, 240, 0.5);
+      z-index: 1;
+    }
+
+    .harness-label {
+      position: absolute;
+      top: -16px;
+      left: 28px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      color: var(--paper-2);
+      background: var(--green);
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .agent-boxes {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .agent-box {
+      min-height: 172px;
+      border-radius: 22px;
+      padding: 18px;
+      border: 1px solid rgba(23, 32, 27, 0.16);
+      background: rgba(255, 250, 240, 0.78);
+    }
+
+    .agent-box.llm {
+      grid-row: span 2;
+      display: grid;
+      align-content: center;
+      color: var(--paper-2);
+      background: linear-gradient(145deg, var(--green), #0f251b);
+    }
+
+    .prompt-stack {
+      display: grid;
+      gap: 12px;
+      align-content: center;
+    }
+
+    .prompt-layer {
+      padding: 16px 18px;
+      border-radius: 18px;
+      border-left: 10px solid var(--green);
+      background: rgba(255, 250, 240, 0.74);
+      box-shadow: 0 12px 28px rgba(23, 32, 27, 0.08);
+    }
+
+    .prompt-layer:nth-child(2) { border-left-color: var(--blue); margin-left: 26px; }
+    .prompt-layer:nth-child(3) { border-left-color: var(--clay); margin-left: 52px; }
+    .prompt-layer:nth-child(4) { border-left-color: var(--lime); margin-left: 78px; }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .stage {
+      position: relative;
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: rgba(255, 250, 240, 0.74);
+      border: 1px solid var(--line);
+      min-height: 330px;
+    }
+
+    .stage::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -19px;
+      width: 24px;
+      height: 2px;
+      background: rgba(128, 62, 47, 0.6);
+    }
+
+    .stage:last-child::after { display: none; }
+
+    .stage-number {
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      color: var(--paper-2);
+      background: var(--rust);
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .qa {
+      display: grid;
+      place-items: center;
+      text-align: center;
+      height: 100%;
+    }
+
+    .qa h1 { font-size: clamp(70px, 14vw, 210px); }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+      border-top: 1px solid var(--line);
+      padding-top: 12px;
+    }
+
+    .progress {
+      position: fixed;
+      left: 24px;
+      right: 24px;
+      bottom: 8px;
+      height: 5px;
+      border-radius: 999px;
+      background: rgba(23, 32, 27, 0.13);
+      overflow: hidden;
+      z-index: 50;
+    }
+
+    .bar {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--green), var(--clay), var(--lime));
+      transition: width 240ms ease;
+    }
+
+    .controls {
+      position: fixed;
+      right: 28px;
+      bottom: 24px;
+      display: flex;
+      gap: 8px;
+      z-index: 60;
+    }
+
+    button {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(23, 32, 27, 0.18);
+      border-radius: 50%;
+      color: var(--paper-2);
+      background: var(--green);
+      cursor: pointer;
+      font-size: 20px;
+      box-shadow: 0 10px 22px rgba(23, 32, 27, 0.18);
+    }
+
+    @media (max-width: 920px) {
+      body { overflow: auto; }
+      .deck { height: auto; min-height: 100vh; }
+      .slide {
+        position: relative;
+        inset: auto;
+        min-height: 100vh;
+        margin: 0;
+        border-radius: 0;
+        overflow: visible;
+      }
+      .content {
+        overflow: visible;
+        padding-right: 0;
+      }
+      .two-col, .two-col.wide-left, .three-col, .pipeline, .agent-grid, .agent-boxes, .tree-branches, .tensor, .dataset-split {
+        grid-template-columns: 1fr;
+      }
+      .backward-layout {
+        grid-template-columns: 1fr;
+      }
+      .tree-branches::before, .branch::before, .stage::after { display: none; }
+      .branch.focus { transform: none; }
+      header { grid-template-columns: 1fr; }
+      .controls, .progress { display: none; }
+      .prompt-layer, .prompt-layer:nth-child(n) { margin-left: 0; }
+      .user-box { min-height: 160px; }
+    }
+
+    @media print {
+      html, body { overflow: visible; background: white; }
+      body::before, .controls, .progress { display: none; }
+      .deck { height: auto; }
+      .slide, .slide.active {
+        display: grid;
+        position: relative;
+        inset: auto;
+        width: 100vw;
+        min-height: 100vh;
+        page-break-after: always;
+        box-shadow: none;
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="slide active">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 1 | Map of AI</div>
+          <h2>What Is AI?</h2>
+        </div>
+        <p class="small">AI is the field of building systems that perform tasks normally associated with human intelligence: reasoning, planning, learning, perception, language, and action.</p>
+      </header>
+      <div class="content">
+        <div class="tree">
+          <div class="tree-root">Artificial Intelligence</div>
+          <div class="tree-branches">
+            <article class="branch">
+              <h3>Symbolic / Rule-Based</h3>
+              <p class="small">Reasoning uses explicit symbols, facts, relations, and human-defined inference rules.</p>
+              <ul>
+                <li>Expert systems</li>
+                <li>Logic programming</li>
+                <li>Knowledge graphs as representation</li>
+              </ul>
+            </article>
+            <article class="branch">
+              <h3>Search & Planning</h3>
+              <p class="small">Explore possible states to choose actions.</p>
+              <ul>
+                <li>A* search</li>
+                <li>Game trees</li>
+                <li>Classical planners</li>
+              </ul>
+            </article>
+            <article class="branch">
+              <h3>Workflow / Programmatic Systems</h3>
+              <p class="small">Systems execute explicit procedures or orchestrated workflows. This is not the same as tool use around an LLM.</p>
+              <ul>
+                <li>Automation scripts</li>
+                <li>Decision workflows</li>
+                <li>Business rule engines</li>
+              </ul>
+            </article>
+            <article class="branch">
+              <h3>Probabilistic & Evolutionary</h3>
+              <p class="small">Model uncertainty or improve candidates through variation and selection.</p>
+              <ul>
+                <li>Bayesian networks</li>
+                <li>Markov models</li>
+                <li>Genetic algorithms</li>
+              </ul>
+            </article>
+            <article class="branch focus">
+              <h3>Machine Learning</h3>
+              <p class="small">Learn patterns from data instead of relying only on hand-written rules.</p>
+              <div class="ml-subtree">
+                <div class="node">Linear / Logistic</div>
+                <div class="node">Decision Trees</div>
+                <div class="node">Decision Forests</div>
+                <div class="node">Random Forests</div>
+                <div class="node">SVM / kNN</div>
+                <div class="node">Clustering</div>
+                <div class="node">Bigram / n-gram</div>
+                <div class="node">Neural Nets</div>
+                <div class="node">CNNs</div>
+                <div class="node">RNNs</div>
+                <div class="node">Transformers</div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="card accent-card">
+          <h3>Why this deck narrows into ML</h3>
+          <p class="lead">Modern LLMs are built from neural networks. CNNs learn spatial filters over local patterns, often images. RNNs process sequences step by step with a hidden state. Transformers are the dominant architecture for mainstream LLMs, though state-space and hybrid alternatives exist.</p>
+        </div>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>1 / 7</span></footer>
+    </section>
+
+    <section class="slide">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 2 | Neural Networks</div>
+          <h2>Forward Pass, Loss, Backward Pass</h2>
+        </div>
+        <p class="small">A neural network is a stack of differentiable transformations with trainable parameters. Training adjusts those parameters so the outputs become less wrong.</p>
+      </header>
+      <div class="content slide-2-grid">
+        <article class="card">
+          <h3>Forward Pass</h3>
+          <p class="small">Inputs become vectors or matrices. Layers repeatedly apply matrix multiplication, bias addition, normalization, nonlinearities, and attention.</p>
+          <div class="formula mono">
+            <div>h1 = xW1 + b1; a1 = GELU(h1)</div>
+            <div>logits = a1W2 + b2</div>
+            <div>softmax(logits) = probabilities</div>
+            <div>cross_entropy(probabilities, target) = loss</div>
+          </div>
+          <p class="small" style="margin-top:12px;">Logits are raw scores before the final softmax. Inside the MLP, the activation is usually GELU, SiLU, or a gated variant such as SwiGLU.</p>
+          <svg class="nn-graph" viewBox="0 0 960 205" role="img" aria-label="Neural network forward pass from input through MLP with linear activation linear, then logits, final softmax, and cross entropy loss">
+            <defs>
+              <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                <path d="M0,0 L8,4 L0,8 Z" fill="rgba(128, 62, 47, 0.72)"></path>
+              </marker>
+            </defs>
+            <rect class="mlp-shell" x="164" y="18" width="404" height="128" rx="20"></rect>
+            <text x="366" y="42" text-anchor="middle" font-size="18">MLP</text>
+            <text class="sub" x="366" y="62" text-anchor="middle">multi-layer perceptron</text>
+
+            <rect class="node-box" x="18" y="66" width="108" height="62" rx="16"></rect>
+            <text x="72" y="92" text-anchor="middle" font-size="17">Input</text>
+            <text class="sub" x="72" y="111" text-anchor="middle">x</text>
+
+            <path class="edge" d="M126 97 H178"></path>
+            <rect class="node-box param" x="184" y="70" width="106" height="56" rx="15"></rect>
+            <text x="237" y="92" text-anchor="middle" font-size="16">Linear</text>
+            <text class="sub" x="237" y="110" text-anchor="middle">xW1 + b1</text>
+
+            <path class="edge" d="M290 98 H326"></path>
+            <rect class="node-box prob" x="332" y="70" width="106" height="56" rx="15"></rect>
+            <text x="385" y="92" text-anchor="middle" font-size="16">Activation</text>
+            <text class="sub" x="385" y="110" text-anchor="middle">GELU / SiLU</text>
+
+            <path class="edge" d="M438 98 H474"></path>
+            <rect class="node-box param" x="480" y="70" width="106" height="56" rx="15"></rect>
+            <text x="533" y="92" text-anchor="middle" font-size="16">Linear</text>
+            <text class="sub" x="533" y="110" text-anchor="middle">a1W2 + b2</text>
+
+            <path class="edge" d="M586 98 H626"></path>
+            <rect class="node-box hot" x="632" y="66" width="98" height="62" rx="16"></rect>
+            <text x="681" y="92" text-anchor="middle" font-size="17">Logits</text>
+            <text class="sub" x="681" y="111" text-anchor="middle">raw scores</text>
+
+            <path class="edge" d="M730 98 H770"></path>
+            <rect class="node-box prob" x="776" y="66" width="98" height="62" rx="16"></rect>
+            <text x="825" y="92" text-anchor="middle" font-size="17">Softmax</text>
+            <text class="sub" x="825" y="111" text-anchor="middle">probabilities</text>
+
+            <path class="edge" d="M874 98 H904"></path>
+            <rect class="node-box" x="910" y="66" width="42" height="62" rx="14"></rect>
+            <text x="931" y="92" text-anchor="middle" font-size="16">Loss</text>
+            <text class="sub" x="931" y="111" text-anchor="middle">L</text>
+
+            <path class="edge" d="M825 128 C825 168 724 168 681 132"></path>
+            <text class="sub" x="752" y="180" text-anchor="middle">cross-entropy compares probabilities with target</text>
+          </svg>
+        </article>
+        <article class="card dark-card">
+          <h3>Backward Pass</h3>
+          <div class="backward-layout">
+            <div>
+              <ul>
+                <li>For every trainable parameter, compute its gradient: <span class="mono">dL/dParameter</span>.</li>
+                <li>The gradient says how changing that parameter would change the loss.</li>
+                <li>Backpropagation applies the chain rule from the loss backward through each layer.</li>
+                <li>Then the optimizer nudges parameters opposite the gradient: <span class="mono">parameter = parameter - learning_rate &times; gradient</span>.</li>
+              </ul>
+            </div>
+            <svg class="nn-graph" viewBox="0 0 960 245" role="img" aria-label="Backward pass graph showing gradients through loss, softmax, logits, and MLP layers">
+              <defs>
+                <marker id="arrowhead-back" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                  <path d="M0,0 L8,4 L0,8 Z" fill="rgba(33, 79, 58, 0.78)"></path>
+                </marker>
+              </defs>
+
+              <rect class="mlp-shell" x="164" y="20" width="404" height="134" rx="20"></rect>
+              <text x="366" y="44" text-anchor="middle" font-size="18">MLP</text>
+              <text class="sub" x="366" y="64" text-anchor="middle">gradients pass backward through every operation</text>
+
+              <rect class="node-box" x="18" y="74" width="108" height="62" rx="16"></rect>
+              <text x="72" y="100" text-anchor="middle" font-size="17">Input</text>
+              <text class="sub" x="72" y="119" text-anchor="middle">x</text>
+
+              <rect class="node-box param" x="184" y="78" width="106" height="56" rx="15"></rect>
+              <text x="237" y="100" text-anchor="middle" font-size="16">Linear</text>
+              <text class="sub" x="237" y="118" text-anchor="middle">W1, b1</text>
+
+              <rect class="node-box prob" x="332" y="78" width="106" height="56" rx="15"></rect>
+              <text x="385" y="100" text-anchor="middle" font-size="16">Activation</text>
+              <text class="sub" x="385" y="118" text-anchor="middle">a1</text>
+
+              <rect class="node-box param" x="480" y="78" width="106" height="56" rx="15"></rect>
+              <text x="533" y="100" text-anchor="middle" font-size="16">Linear</text>
+              <text class="sub" x="533" y="118" text-anchor="middle">W2, b2</text>
+
+              <rect class="node-box hot" x="632" y="74" width="98" height="62" rx="16"></rect>
+              <text x="681" y="100" text-anchor="middle" font-size="17">Logits</text>
+              <text class="sub" x="681" y="119" text-anchor="middle">z2</text>
+
+              <rect class="node-box prob" x="776" y="74" width="98" height="62" rx="16"></rect>
+              <text x="825" y="100" text-anchor="middle" font-size="17">Softmax</text>
+              <text class="sub" x="825" y="119" text-anchor="middle">p</text>
+
+              <rect class="node-box" x="910" y="74" width="42" height="62" rx="14"></rect>
+              <text x="931" y="100" text-anchor="middle" font-size="16">Loss</text>
+              <text class="sub" x="931" y="119" text-anchor="middle">L</text>
+
+              <path class="back-edge" d="M910 105 H880"></path>
+              <text class="sub" x="895" y="94" text-anchor="middle">dL/dp</text>
+              <path class="back-edge" d="M776 105 H736"></path>
+              <text class="sub" x="756" y="94" text-anchor="middle">dL/dz2</text>
+              <path class="back-edge" d="M632 105 H592"></path>
+              <text class="sub" x="612" y="94" text-anchor="middle">dL/dW2</text>
+              <path class="back-edge" d="M480 105 H444"></path>
+              <text class="sub" x="462" y="94" text-anchor="middle">dL/da1</text>
+              <path class="back-edge" d="M332 105 H296"></path>
+              <text class="sub" x="314" y="94" text-anchor="middle">dL/dh1</text>
+              <path class="back-edge" d="M184 105 H132"></path>
+              <text class="sub" x="158" y="94" text-anchor="middle">dL/dx</text>
+
+              <rect class="node-box grad" x="120" y="178" width="720" height="44" rx="14"></rect>
+              <text class="sub" x="480" y="197" text-anchor="middle">chain rule: dL/dW1 = dL/dh1 * dh1/dW1, and dL/dW2 = dL/dz2 * dz2/dW2</text>
+              <text class="sub" x="480" y="215" text-anchor="middle">each layer uses the derivative from the next layer as its upstream gradient</text>
+            </svg>
+          </div>
+        </article>
+        <article class="card" style="grid-column: 1 / -1;">
+          <h3>Common Layer Types</h3>
+          <div class="pill-row">
+            <span class="pill">Embedding: token id &rarr; vector</span>
+            <span class="pill">Linear: matrix projection</span>
+            <span class="pill">Activation: GELU / SiLU nonlinearity</span>
+            <span class="pill">Normalization: LayerNorm / RMSNorm</span>
+            <span class="pill">Attention: mix allowed context positions</span>
+            <span class="pill">Softmax: scores &rarr; distribution</span>
+            <span class="pill">Residual: preserve signal through depth</span>
+            <span class="pill">Dropout: optional training regularizer</span>
+          </div>
+        </article>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>2 / 7</span></footer>
+    </section>
+
+    <section class="slide">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 3 | Tokenization</div>
+          <h2>Tokens, Batches, Context</h2>
+        </div>
+        <p class="small">For teaching, use character tokens. Production LLMs usually use subword tokens, but the tensor idea is the same.</p>
+      </header>
+      <div class="content slide-3-grid">
+        <article class="card accent-card">
+          <h3>1. Split the Data Before Training</h3>
+          <p class="small">The split protects you from fooling yourself. The model should not repeatedly see the final evaluation set while you are still making architecture, hyperparameter, or training decisions.</p>
+          <div class="dataset-split">
+            <div class="mini-card">
+              <strong>Training</strong>
+              <p class="small">Used for gradient updates. The model directly learns from these examples.</p>
+            </div>
+            <div class="mini-card">
+              <strong>Validation</strong>
+              <p class="small">Used during development to compare checkpoints, tune hyperparameters, and detect overfitting.</p>
+            </div>
+            <div class="mini-card">
+              <strong>Test</strong>
+              <p class="small">Used only when you believe the model is ready. Repeated test-set checks leak information and increase overfitting risk.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>2. Tokens and Batches</h3>
+          <p class="small">A token is the atomic unit the model reads and predicts. Here we use character-level tokenization for the word <span class="mono">modern</span>. <span class="mono">_</span> is a special start / padding token and <span class="mono">&lt;END&gt;</span> marks the end of the word. With context length 8, each row predicts the next character.</p>
+          <table>
+            <thead><tr><th>Batch row</th><th>Tokenized input context</th><th>Target token</th></tr></thead>
+            <tbody class="mono">
+              <tr><td>0</td><td>________</td><td>m</td></tr>
+              <tr><td>1</td><td>_______m</td><td>o</td></tr>
+              <tr><td>2</td><td>______mo</td><td>d</td></tr>
+              <tr><td>3</td><td>_____mod</td><td>e</td></tr>
+              <tr><td>4</td><td>____mode</td><td>r</td></tr>
+              <tr><td>5</td><td>___moder</td><td>n</td></tr>
+              <tr><td>6</td><td>__modern</td><td>&lt;END&gt;</td></tr>
+            </tbody>
+          </table>
+          <p class="small" style="margin-top:12px;">Many rows together form a 2D batch matrix: <span class="mono">batch_size &times; context_length</span>. Context length is the maximum number of input tokens the model can directly see in one forward pass.</p>
+        </article>
+
+        <article class="card">
+          <h3>3. Embeddings Add the Third Dimension</h3>
+          <p class="small">A token embedding matrix has shape <span class="mono">vocabulary_size &times; embedding_dim</span>. Looking up each token id turns the 2D batch into a 3D tensor: <span class="mono">batch_size &times; context_length &times; embedding_dim</span>. Position information is added separately with positional embeddings or encodings, so the model can distinguish the first <span class="mono">m</span> from a later <span class="mono">m</span>.</p>
+          <table>
+            <thead>
+              <tr><th>Single batch row, C=4 example</th><th>pos 0</th><th>pos 1</th><th>pos 2</th><th>pos 3</th><th>pos 4</th><th>pos 5</th><th>pos 6</th><th>pos 7</th></tr>
+            </thead>
+            <tbody class="mono">
+              <tr><td>input tokens</td><td>_</td><td>_</td><td>m</td><td>o</td><td>d</td><td>e</td><td>r</td><td>n</td></tr>
+              <tr><td>position ids</td><td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+              <tr><td>channel 0</td><td>0.12</td><td>0.13</td><td>-0.44</td><td>0.21</td><td>0.05</td><td>-0.31</td><td>0.72</td><td>0.18</td></tr>
+              <tr><td>channel 1</td><td>-0.08</td><td>-0.06</td><td>0.67</td><td>-0.35</td><td>0.41</td><td>0.14</td><td>-0.22</td><td>0.53</td></tr>
+              <tr><td>channel 2</td><td>0.39</td><td>0.42</td><td>0.11</td><td>0.88</td><td>-0.27</td><td>0.09</td><td>0.31</td><td>-0.16</td></tr>
+              <tr><td>channel 3</td><td>-0.51</td><td>-0.49</td><td>0.24</td><td>0.06</td><td>0.73</td><td>-0.62</td><td>0.04</td><td>0.29</td></tr>
+            </tbody>
+          </table>
+          <p class="small" style="margin-top:12px;">Each token position is represented by a vector of many scalars. This table shows only four channels; real LLMs often use thousands.</p>
+          <div class="tensor">
+            <div class="tensor-step"><strong>Token IDs</strong><span class="mono">B &times; T</span><br />Integer ids from the tokenizer.</div>
+            <div class="tensor-step"><strong>Embeddings</strong><span class="mono">B &times; T &times; C</span><br />Each token-position pair becomes C scalars.</div>
+            <div class="tensor-step"><strong>Self-Attention</strong><span class="mono">T &larr; allowed T</span><br />Each position reads from other allowed positions in the same sequence.</div>
+          </div>
+          <p class="small" style="margin-top:12px;">In multi-head self-attention, the model splits or projects the representation dimension <span class="mono">C</span> across heads. It is not only positional information that is split; token meaning and position are mixed in the representation each head reads.</p>
+        </article>
+
+        <article class="card accent-card">
+          <h3>4. Reading the Shape: B &times; T &times; C</h3>
+          <p class="small">The model processes a tensor with three dimensions during training and inference. The context available to one example is mainly its <span class="mono">T</span> token positions, represented with <span class="mono">C</span> channels at each position. <span class="mono">B</span> is parallelism: multiple independent contexts processed together.</p>
+          <div class="dataset-split">
+            <div class="mini-card">
+              <strong>B = Batch</strong>
+              <p class="small">How many independent examples are processed at once. Batch items do not see each other as context.</p>
+            </div>
+            <div class="mini-card">
+              <strong>T = Tokens</strong>
+              <p class="small">How many token positions are in each example. This is the context length the model can attend over.</p>
+            </div>
+            <div class="mini-card">
+              <strong>C = Channels</strong>
+              <p class="small">How many scalar features represent each token position after embedding and layer transformations.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>3 / 7</span></footer>
+    </section>
+
+    <section class="slide">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 4 | LLM to Agent</div>
+          <h2>From Model to Agent Harness</h2>
+        </div>
+        <p class="small">In product and coding tools, the deployable agent is usually the model plus a harness. The harness supplies memory, tools, permissions, routing, and execution loops.</p>
+      </header>
+      <div class="content agent-grid">
+        <svg class="agent-arrow-layer" viewBox="0 0 1000 430" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <marker id="agent-arrowhead" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+              <path d="M0,0 L9,4.5 L0,9 Z" fill="rgba(128, 62, 47, 0.78)"></path>
+            </marker>
+          </defs>
+          <path d="M250 95 C330 38 388 16 438 20"></path>
+          <text x="405" y="35" text-anchor="middle" font-size="17">Provide tasks | expect real-world results</text>
+          <path d="M250 230 C358 238 438 248 502 258"></path>
+          <text x="382" y="228" text-anchor="middle" font-size="17">Prompt in | text out</text>
+        </svg>
+        <div class="user-box">
+          <div>
+            <h3>User</h3>
+          </div>
+        </div>
+        <div class="harness">
+          <div class="harness-label">Agent Harness</div>
+          <div class="agent-boxes">
+            <article class="agent-box llm">
+              <h3>LLM Core</h3>
+              <p class="small">No persistent memory or external capabilities by itself. It predicts the next token from the tokens currently in context.</p>
+            </article>
+            <article class="agent-box">
+              <h3>Conversation Memory</h3>
+              <ul>
+                <li>Current message history</li>
+                <li>In-memory buffer</li>
+                <li>Database-backed sessions</li>
+                <li>Summaries loaded into context</li>
+              </ul>
+            </article>
+            <article class="agent-box">
+              <h3>Long-Term Memory</h3>
+              <ul>
+                <li>Retrieved by tools, then inserted into context</li>
+                <li>SQL / document DBs</li>
+                <li>Vector DBs and RAG</li>
+                <li>User profiles or project notes</li>
+              </ul>
+            </article>
+            <article class="agent-box">
+              <h3>Tools</h3>
+              <ul>
+                <li>Web search / scraping</li>
+                <li>Bash execution</li>
+                <li>File editing</li>
+                <li>APIs, browsers, calendars, databases</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>4 / 7</span></footer>
+    </section>
+
+    <section class="slide">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 5 | Prompt Hierarchy</div>
+          <h2>Prompts Guide; Harnesses Enforce</h2>
+        </div>
+        <p class="small">Prompts are text in the model context. Real constraints come from surrounding software: parsers, sandboxes, approval gates, credentials, and tool schemas.</p>
+      </header>
+      <div class="content two-col">
+        <article class="prompt-stack">
+          <div class="prompt-layer"><h3>System / Developer Prompt</h3><p class="small">Highest-priority behavior, safety, style, and tool-use instructions.</p></div>
+          <div class="prompt-layer"><h3>User Prompt</h3><p class="small">The task request and preferences for the current interaction.</p></div>
+          <div class="prompt-layer"><h3>Assistant Tool Request</h3><p class="small">The model proposes a structured action, such as running a command or calling an API.</p></div>
+          <div class="prompt-layer"><h3>Tool Response</h3><p class="small">Untrusted observed output returned to context for the next reasoning step.</p></div>
+        </article>
+        <article class="card dark-card">
+          <h3>Skills and Sub-Agents in Coding Tools</h3>
+          <ul>
+            <li>Many coding agents keep skill or agent descriptions as markdown files.</li>
+            <li>The harness or model detects a relevant capability, loads the selected instructions into context, and may expose extra tools.</li>
+            <li>Agent-like behavior is also taught during supervised fine-tuning with examples of planning, tool calls, observations, and final answers.</li>
+            <li>Prompt hierarchy guides behavior, but cannot physically enforce access control. The harness must enforce file permissions, network access, command approval, and tool schemas.</li>
+          </ul>
+        </article>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>5 / 7</span></footer>
+    </section>
+
+    <section class="slide">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 6 | Model Training Path</div>
+          <h2>How Base Models Become Assistants</h2>
+        </div>
+        <p class="small">The public assistant experience is usually several stages after raw next-token pretraining.</p>
+      </header>
+      <div class="content">
+        <div class="pipeline">
+          <article class="stage">
+            <div class="stage-number">1</div>
+            <h3>Base Model</h3>
+            <ul>
+              <li>Trained with next-token prediction on massive text/code data.</li>
+              <li>Learns language, style, patterns, and factual associations.</li>
+              <li>Not yet reliably helpful, safe, or instruction-following.</li>
+            </ul>
+          </article>
+          <article class="stage">
+            <div class="stage-number">2</div>
+            <h3>SFT</h3>
+            <ul>
+              <li>Supervised fine-tuning on curated demonstrations.</li>
+              <li>Often human-authored or human-annotated examples.</li>
+              <li>Teaches assistant format, tool-call traces, refusals, and task completion.</li>
+            </ul>
+          </article>
+          <article class="stage">
+            <div class="stage-number">3</div>
+            <h3>Preference Signal</h3>
+            <ul>
+              <li>Human or AI preferences compare candidate answers.</li>
+              <li>A reward model may learn which outputs are better.</li>
+              <li>This is commonly preference ranking, not just a single binary token.</li>
+              <li>Direct methods like DPO can optimize preferences without a separate reward model stage.</li>
+            </ul>
+          </article>
+          <article class="stage">
+            <div class="stage-number">4</div>
+            <h3>Preference Optimization</h3>
+            <ul>
+              <li>Optimize the assistant against preference or reward signals.</li>
+              <li>RLHF uses human preference feedback.</li>
+              <li>RLAIF uses AI-generated feedback or critiques.</li>
+              <li>Modern pipelines may also use DPO, distillation, rejection sampling, or verifier feedback.</li>
+            </ul>
+          </article>
+        </div>
+        <article class="card accent-card">
+          <h3>Result</h3>
+          <p class="lead">The final system is a trained model plus an inference stack, safety policies, tool interfaces, memory systems, and product-specific harness logic. The model may encode factual associations, but retrieval is imperfect and must be checked for stale or invented claims.</p>
+        </article>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>6 / 7</span></footer>
+    </section>
+
+    <section class="slide">
+      <div class="qa">
+        <div>
+          <div class="eyebrow" style="margin-inline:auto;">Slide 7</div>
+          <h1>Q&amp;A</h1>
+          <p class="lead" style="margin-inline:auto;">Questions about AI, machine learning, neural networks, tokenization, agents, prompts, or training pipelines.</p>
+        </div>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>7 / 7</span></footer>
+    </section>
+  </main>
+
+  <div class="progress" aria-hidden="true"><div class="bar"></div></div>
+  <div class="controls" aria-label="Slide controls">
+    <button type="button" id="prev" aria-label="Previous slide">&lsaquo;</button>
+    <button type="button" id="next" aria-label="Next slide">&rsaquo;</button>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const bar = document.querySelector('.bar');
+    let index = 0;
+
+    function showSlide(nextIndex) {
+      index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      bar.style.width = `${((index + 1) / slides.length) * 100}%`;
+      document.title = `Modern AI Knowledge | ${index + 1}/${slides.length}`;
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+
+    document.getElementById('prev').addEventListener('click', () => showSlide(index - 1));
+    document.getElementById('next').addEventListener('click', () => showSlide(index + 1));
+
+    window.addEventListener('keydown', (event) => {
+      if (['ArrowRight', 'PageDown', ' '].includes(event.key)) showSlide(index + 1);
+      if (['ArrowLeft', 'PageUp'].includes(event.key)) showSlide(index - 1);
+      if (event.key === 'Home') showSlide(0);
+      if (event.key === 'End') showSlide(slides.length - 1);
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
