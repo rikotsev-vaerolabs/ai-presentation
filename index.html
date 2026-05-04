@@ -735,7 +735,18 @@
       .tree-branches::before, .branch::before, .stage::after { display: none; }
       .branch.focus { transform: none; }
       header { grid-template-columns: 1fr; }
-      .controls, .progress { display: none; }
+      .progress { display: none; }
+      .controls {
+        display: flex;
+        right: 14px;
+        bottom: 14px;
+        gap: 10px;
+      }
+      .controls button {
+        width: 48px;
+        height: 48px;
+        font-size: 26px;
+      }
       .prompt-layer, .prompt-layer:nth-child(n) { margin-left: 0; }
       .user-box { min-height: 160px; }
     }
