@@ -180,6 +180,104 @@
       text-transform: uppercase;
     }
 
+    .term-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .term-card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(255, 250, 240, 0.72);
+      padding: clamp(16px, 1.8vw, 24px);
+      box-shadow: 0 14px 34px rgba(23, 32, 27, 0.08);
+    }
+
+    .term-card:nth-child(2) {
+      background: linear-gradient(145deg, rgba(185, 109, 72, 0.16), rgba(255, 250, 240, 0.72));
+    }
+
+    .term-card:nth-child(3) {
+      background: linear-gradient(145deg, rgba(40, 91, 115, 0.16), rgba(255, 250, 240, 0.72));
+    }
+
+    .term-card:nth-child(4) {
+      background: linear-gradient(145deg, rgba(199, 214, 109, 0.28), rgba(255, 250, 240, 0.72));
+    }
+
+    .term-list {
+      display: grid;
+      gap: 11px;
+      margin-top: 14px;
+    }
+
+    .term-item {
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(23, 32, 27, 0.12);
+      background: rgba(255, 250, 240, 0.55);
+    }
+
+    .term-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-size: clamp(17px, 1.35vw, 24px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .mcp-grid {
+      display: grid;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .mcp-examples {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .mcp-example {
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(23, 32, 27, 0.14);
+      background: rgba(255, 250, 240, 0.62);
+    }
+
+    .mcp-example strong {
+      display: block;
+      margin-bottom: 6px;
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-size: clamp(17px, 1.35vw, 23px);
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .classification-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .classification-table td:first-child {
+      font-family: "Avenir Next Condensed", "Gill Sans", "Trebuchet MS", sans-serif;
+      font-size: clamp(16px, 1.3vw, 22px);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+    }
+
+    .classification-table .allowed { color: var(--green); font-weight: 800; }
+    .classification-table .caution { color: var(--rust); font-weight: 800; }
+    .classification-table .forbidden { color: var(--rust); font-weight: 800; }
+
     .card {
       border: 1px solid var(--line);
       border-radius: 20px;
@@ -726,7 +824,7 @@
         overflow: visible;
         padding-right: 0;
       }
-      .two-col, .two-col.wide-left, .three-col, .pipeline, .agent-grid, .agent-boxes, .tree-branches, .tensor, .dataset-split {
+      .two-col, .two-col.wide-left, .three-col, .pipeline, .agent-grid, .agent-boxes, .tree-branches, .tensor, .dataset-split, .term-grid, .mcp-grid, .mcp-examples, .classification-grid {
         grid-template-columns: 1fr;
       }
       .backward-layout {
@@ -773,7 +871,197 @@
     <section class="slide active">
       <header>
         <div>
-          <div class="eyebrow">Slide 1 | Map of AI</div>
+          <div class="eyebrow">Slide 1 | LLM Terminology</div>
+          <h2>Words We Will Reuse</h2>
+        </div>
+        <p class="small">Most confusion around LLMs comes from mixing model behavior, product harness behavior, and storage/retrieval systems. Keep these concepts separate.</p>
+      </header>
+      <div class="content">
+        <div class="term-grid">
+          <article class="term-card">
+            <h3>Core LLM Terms</h3>
+            <div class="term-list">
+              <div class="term-item">
+                <strong>Token</strong>
+                <p class="small">The unit the model reads and predicts: often a word piece, punctuation mark, space, or short string.</p>
+              </div>
+              <div class="term-item">
+                <strong>Prompt</strong>
+                <p class="small">The instructions and data placed into the model's current input.</p>
+              </div>
+              <div class="term-item">
+                <strong>Context</strong>
+                <p class="small">The token window the model can directly attend to during one response.</p>
+              </div>
+            </div>
+          </article>
+          <article class="term-card">
+            <h3>Randomness</h3>
+            <div class="term-list">
+              <div class="term-item">
+                <strong>Temperature</strong>
+                <p class="small">Controls how strongly the sampler favors the most likely next tokens. Higher values usually mean more variety and more risk.</p>
+              </div>
+              <div class="term-item">
+                <strong>Hallucination</strong>
+                <p class="small">A fluent answer that is unsupported, fabricated, stale, or incorrectly grounded in the available evidence.</p>
+              </div>
+            </div>
+          </article>
+          <article class="term-card">
+            <h3>Usage Layer</h3>
+            <div class="term-list">
+              <div class="term-item">
+                <strong>Skills</strong>
+                <p class="small">Reusable instructions or workflows loaded by the agent harness for a specific kind of task.</p>
+              </div>
+              <div class="term-item">
+                <strong>Hooks</strong>
+                <p class="small">Programmatic events around the model loop: before/after tool calls, saves, validations, or policy checks.</p>
+              </div>
+              <div class="term-item">
+                <strong>MCP</strong>
+                <p class="small">Model Context Protocol: a standard way for tools and data sources to expose capabilities to AI clients.</p>
+              </div>
+            </div>
+          </article>
+          <article class="term-card">
+            <h3>Storage & Retrieval</h3>
+            <div class="term-list">
+              <div class="term-item">
+                <strong>RAG</strong>
+                <p class="small">Retrieval-augmented generation: fetch relevant external content and place it into context before answering.</p>
+              </div>
+              <div class="term-item">
+                <strong>Vector Database</strong>
+                <p class="small">Stores embeddings so semantically similar text, images, or records can be retrieved by similarity search.</p>
+              </div>
+              <div class="term-item">
+                <strong>Knowledge Graph</strong>
+                <p class="small">Stores entities and relationships explicitly, useful when structure and provenance matter.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>1 / 10</span></footer>
+    </section>
+
+    <section class="slide">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 2 | MCP Examples</div>
+          <h2>What MCP Looks Like in Practice</h2>
+        </div>
+        <p class="small">MCP is useful when the same tool or data source should be safely exposed to multiple AI clients through a clear interface.</p>
+      </header>
+      <div class="content mcp-grid">
+        <article class="card accent-card">
+          <h3>Concrete MCP Servers</h3>
+          <div class="mcp-examples">
+            <div class="mcp-example">
+              <strong>playwright-mcp</strong>
+              <p class="small">Browser automation: navigate pages, inspect UI, run interaction flows, and verify web app behavior.</p>
+            </div>
+            <div class="mcp-example">
+              <strong>Jira / Atlassian MCP</strong>
+              <p class="small">Project context: search issues, read tickets, update statuses, and connect engineering work to planning systems.</p>
+            </div>
+            <div class="mcp-example">
+              <strong>mcp-toolbox for DBs</strong>
+              <p class="small">Database access with declared tools, query boundaries, schemas, and credentials managed outside the prompt.</p>
+            </div>
+            <div class="mcp-example">
+              <strong>Any API</strong>
+              <p class="small">Wrap internal services, SaaS APIs, or custom business operations as typed tools the model can call.</p>
+            </div>
+          </div>
+          <div class="flow">
+            <div class="flow-box">AI Client</div>
+            <div class="arrow">&rarr;</div>
+            <div class="flow-box">MCP Server</div>
+            <div class="arrow">&rarr;</div>
+            <div class="flow-box">Tool / Data Source</div>
+          </div>
+        </article>
+        <article class="card dark-card">
+          <h3>Pros</h3>
+          <ul>
+            <li>Reusable integration surface across AI tools.</li>
+            <li>Better separation between prompts, credentials, schemas, and execution.</li>
+            <li>Typed tool contracts make capabilities easier to inspect and govern.</li>
+            <li>Good fit for browsers, ticket systems, databases, and internal APIs.</li>
+          </ul>
+          <h3 style="margin-top:18px;">Cons</h3>
+          <ul>
+            <li>More moving parts: configuration, auth, permissions, and logs.</li>
+            <li>Tool choice can become noisy when many MCP servers are connected.</li>
+            <li>Overkill for small one-off tasks, such as editing a simple HTML file.</li>
+            <li>Badly scoped tools can expose too much data or create accidental write paths.</li>
+          </ul>
+        </article>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>2 / 10</span></footer>
+    </section>
+
+    <section class="slide">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 3 | Data Classification</div>
+          <h2>Classify Before You Prompt</h2>
+        </div>
+        <p class="small">Adapted from the Vaerolabs AI onboarding policy: decide the data tier before pasting anything into an AI tool.</p>
+      </header>
+      <div class="content classification-grid">
+        <article class="card accent-card">
+          <h3>What Can Go Into External AI?</h3>
+          <table class="classification-table">
+            <thead>
+              <tr><th>Tier</th><th>Examples</th><th>External AI</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Public</td>
+                <td>Public docs, OSS code, press releases, blog drafts</td>
+                <td><span class="allowed">Allowed</span></td>
+              </tr>
+              <tr>
+                <td>Internal</td>
+                <td>Non-sensitive code, internal docs, public-API examples, training material</td>
+                <td><span class="allowed">Allowed</span> on sanctioned zero-retention tiers</td>
+              </tr>
+              <tr>
+                <td>Confidential</td>
+                <td>Proprietary code, design docs, customer names or IDs, internal Jira tickets, anonymised metrics</td>
+                <td><span class="caution">Redact first</span>; never paste customer identifiers verbatim</td>
+              </tr>
+              <tr>
+                <td>Restricted</td>
+                <td>Airworthiness data, maintenance records, regulated submissions, secrets, credentials, personal data</td>
+                <td><span class="forbidden">Forbidden</span>, no exceptions</td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="small" style="margin-top:12px;">When in doubt, treat the material as one tier higher.</p>
+        </article>
+        <article class="card dark-card">
+          <h3>Hard Rules</h3>
+          <ul>
+            <li>Never paste secrets: API keys, passwords, tokens, certs.</li>
+            <li>Never paste personal data of identified individuals.</li>
+            <li>Never paste airworthiness or maintenance records.</li>
+            <li>Strip customer-identifying data before prompting.</li>
+            <li>Production code is only acceptable when the repo is non-customer-specific and the tool is sanctioned.</li>
+          </ul>
+        </article>
+      </div>
+      <footer><span>Modern AI Knowledge</span><span>3 / 10</span></footer>
+    </section>
+
+    <section class="slide">
+      <header>
+        <div>
+          <div class="eyebrow">Slide 4 | Map of AI</div>
           <h2>What Is AI?</h2>
         </div>
         <p class="small">AI is the field of building systems that perform tasks normally associated with human intelligence: reasoning, planning, learning, perception, language, and action.</p>
@@ -842,13 +1130,13 @@
           <p class="lead">Modern LLMs are built from neural networks. CNNs learn spatial filters over local patterns, often images. RNNs process sequences step by step with a hidden state. Transformers are the dominant architecture for mainstream LLMs, though state-space and hybrid alternatives exist.</p>
         </div>
       </div>
-      <footer><span>Modern AI Knowledge</span><span>1 / 7</span></footer>
+      <footer><span>Modern AI Knowledge</span><span>4 / 10</span></footer>
     </section>
 
     <section class="slide">
       <header>
         <div>
-          <div class="eyebrow">Slide 2 | Neural Networks</div>
+          <div class="eyebrow">Slide 5 | Neural Networks</div>
           <h2>Forward Pass, Loss, Backward Pass</h2>
         </div>
         <p class="small">A neural network is a stack of differentiable transformations with trainable parameters. Training adjusts those parameters so the outputs become less wrong.</p>
@@ -995,13 +1283,13 @@
           </div>
         </article>
       </div>
-      <footer><span>Modern AI Knowledge</span><span>2 / 7</span></footer>
+      <footer><span>Modern AI Knowledge</span><span>5 / 10</span></footer>
     </section>
 
     <section class="slide">
       <header>
         <div>
-          <div class="eyebrow">Slide 3 | Tokenization</div>
+          <div class="eyebrow">Slide 6 | Tokenization</div>
           <h2>Tokens, Batches, Context</h2>
         </div>
         <p class="small">For teaching, use character tokens. Production LLMs usually use subword tokens, but the tensor idea is the same.</p>
@@ -1088,13 +1376,13 @@
           </div>
         </article>
       </div>
-      <footer><span>Modern AI Knowledge</span><span>3 / 7</span></footer>
+      <footer><span>Modern AI Knowledge</span><span>6 / 10</span></footer>
     </section>
 
     <section class="slide">
       <header>
         <div>
-          <div class="eyebrow">Slide 4 | LLM to Agent</div>
+          <div class="eyebrow">Slide 7 | LLM to Agent</div>
           <h2>From Model to Agent Harness</h2>
         </div>
         <p class="small">In product and coding tools, the deployable agent is usually the model plus a harness. The harness supplies memory, tools, permissions, routing, and execution loops.</p>
@@ -1153,13 +1441,13 @@
           </div>
         </div>
       </div>
-      <footer><span>Modern AI Knowledge</span><span>4 / 7</span></footer>
+      <footer><span>Modern AI Knowledge</span><span>7 / 10</span></footer>
     </section>
 
     <section class="slide">
       <header>
         <div>
-          <div class="eyebrow">Slide 5 | Prompt Hierarchy</div>
+          <div class="eyebrow">Slide 8 | Prompt Hierarchy</div>
           <h2>Prompts Guide; Harnesses Enforce</h2>
         </div>
         <p class="small">Prompts are text in the model context. Real constraints come from surrounding software: parsers, sandboxes, approval gates, credentials, and tool schemas.</p>
@@ -1181,13 +1469,13 @@
           </ul>
         </article>
       </div>
-      <footer><span>Modern AI Knowledge</span><span>5 / 7</span></footer>
+      <footer><span>Modern AI Knowledge</span><span>8 / 10</span></footer>
     </section>
 
     <section class="slide">
       <header>
         <div>
-          <div class="eyebrow">Slide 6 | Model Training Path</div>
+          <div class="eyebrow">Slide 9 | Model Training Path</div>
           <h2>How Base Models Become Assistants</h2>
         </div>
         <p class="small">The public assistant experience is usually several stages after raw next-token pretraining.</p>
@@ -1238,18 +1526,18 @@
           <p class="lead">The final system is a trained model plus an inference stack, safety policies, tool interfaces, memory systems, and product-specific harness logic. The model may encode factual associations, but retrieval is imperfect and must be checked for stale or invented claims.</p>
         </article>
       </div>
-      <footer><span>Modern AI Knowledge</span><span>6 / 7</span></footer>
+      <footer><span>Modern AI Knowledge</span><span>9 / 10</span></footer>
     </section>
 
     <section class="slide">
       <div class="qa">
         <div>
-          <div class="eyebrow" style="margin-inline:auto;">Slide 7</div>
+          <div class="eyebrow" style="margin-inline:auto;">Slide 10</div>
           <h1>Q&amp;A</h1>
           <p class="lead" style="margin-inline:auto;">Questions about AI, machine learning, neural networks, tokenization, agents, prompts, or training pipelines.</p>
         </div>
       </div>
-      <footer><span>Modern AI Knowledge</span><span>7 / 7</span></footer>
+      <footer><span>Modern AI Knowledge</span><span>10 / 10</span></footer>
     </section>
   </main>
 
